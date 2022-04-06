@@ -1,6 +1,11 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
 import app from "./firebase.init";
 import { useState } from "react";
 
@@ -21,10 +26,26 @@ function App() {
         console.error("error", error);
       });
   };
+
+  const handleSignOut = () => {
+    signOut(auth)
+      .then(() => {
+        setUser({});
+      })
+      .catch((error) => {
+        setUser({});
+      });
+  };
   return (
     <div className="App">
-      <button onClick={handleGoogleSignIn}>google sign in</button>
+      {user.email ? (
+        <button onClick={handleSignOut}>Sign Out</button>
+      ) : (
+        <button onClick={handleGoogleSignIn}>google sign in</button>
+      )}
       <h2>Name:{user.displayName}</h2>
+      <p>I know your email address:{user.email}</p>
+      <img src={user.photoURL} alt="" />
     </div>
   );
 }
